@@ -29,6 +29,12 @@ class CalculateController extends GetxController {
     update();
   }
 
+  /// add to the input
+  appendToInput(double value) {
+    userInput += value.toString();
+    update();
+  }
+
   /// Delet Button Pressed Func
   deleteBtnAction() {
     userInput = userInput.substring(0, userInput.length - 1);
