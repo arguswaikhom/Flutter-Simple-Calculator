@@ -1,3 +1,4 @@
+import 'package:flutter_calculator/src/model/calculator_theme.dart';
 import 'package:get/get.dart';
 
 class ThemeController extends GetxController {
@@ -9,9 +10,4 @@ class ThemeController extends GetxController {
     this.theme = theme;
     update();
   }
-}
-
-enum CalculatorTheme {
-  light,
-  dark,
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calculator/src/model/calculator_theme.dart';
 import 'package:get/get.dart';
+
+import '../controller/calculate_controller.dart';
 
 ///
 import '../controller/theme_controller.dart';
-import '../controller/calculate_controller.dart';
 import '../utils/colors.dart';
 import '../widget/button.dart';
 
@@ -51,16 +53,16 @@ class _MainScreenState extends State<MainScreen> {
     "=",
   ];
 
-  /////////////////////////////////////
-  //@CodeWithFlexz on Instagram
-  //
-  //AmirBayat0 on Github
-  //Programming with Flexz on Youtube
-  /////////////////////////////////////
+  @override
+  void dispose() {
+    controller.clearInputAndOutput();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.initial != null && !isInitialAdded) {
-      controller.appendToInput(widget.initial!);
+      controller.resetInput(widget.initial!);
       isInitialAdded = true;
     }
 
@@ -98,89 +100,88 @@ class _MainScreenState extends State<MainScreen> {
   /// In put Section - Enter Numbers
   Expanded inPutSection(bool isDarkTheme, CalculateController controller) {
     return Expanded(
-        flex: 2,
-        child: Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-              color: isDarkTheme
-                  ? DarkColors.sheetBgColor
-                  : LightColors.sheetBgColor,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-          child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: buttons.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4),
-              itemBuilder: (contex, index) {
-                switch (index) {
+      flex: 2,
+      child: Container(
+        padding: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color:
+              isDarkTheme ? DarkColors.sheetBgColor : LightColors.sheetBgColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        child: GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: buttons.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4),
+          itemBuilder: (contex, index) {
+            switch (index) {
 
-                  /// CLEAR BTN
-                  case 0:
-                    return CustomButton(
-                        buttonTapped: () {
+              /// CLEAR BTN
+              case 0:
+                return CustomButton(
+                    buttonTapped: () => controller.clearInputAndOutput(),
+                    color: isDarkTheme
+                        ? DarkColors.btnBgColor
+                        : LightColors.btnBgColor,
+                    textColor: isDarkTheme
+                        ? DarkColors.leftOperatorColor
+                        : LightColors.leftOperatorColor,
+                    text: buttons[index]);
+
+              /// DELETE BTN
+              case 1:
+                return CustomButton(
+                    buttonTapped: () => controller.deleteBtnAction(),
+                    color: isDarkTheme
+                        ? DarkColors.btnBgColor
+                        : LightColors.btnBgColor,
+                    textColor: isDarkTheme
+                        ? DarkColors.leftOperatorColor
+                        : LightColors.leftOperatorColor,
+                    text: buttons[index]);
+
+              /// EQUAL BTN
+              case 18:
+              case 19:
+                return CustomButton(
+                    buttonTapped: () {
+                      controller.equalPressed();
+                      if (index == 18) {
+                        String output = controller.userOutput;
+                        if (double.tryParse(output) != null) {
+                          widget.onClickDone?.call(double.parse(output));
                           controller.clearInputAndOutput();
-                        },
-                        color: isDarkTheme
-                            ? DarkColors.btnBgColor
-                            : LightColors.btnBgColor,
-                        textColor: isDarkTheme
-                            ? DarkColors.leftOperatorColor
-                            : LightColors.leftOperatorColor,
-                        text: buttons[index]);
+                        }
+                      }
+                    },
+                    color: isDarkTheme
+                        ? DarkColors.btnBgColor
+                        : LightColors.btnBgColor,
+                    textColor: isDarkTheme
+                        ? DarkColors.leftOperatorColor
+                        : LightColors.leftOperatorColor,
+                    text: buttons[index]);
 
-                  /// DELETE BTN
-                  case 1:
-                    return CustomButton(
-                        buttonTapped: () {
-                          controller.deleteBtnAction();
-                        },
-                        color: isDarkTheme
-                            ? DarkColors.btnBgColor
-                            : LightColors.btnBgColor,
-                        textColor: isDarkTheme
-                            ? DarkColors.leftOperatorColor
-                            : LightColors.leftOperatorColor,
-                        text: buttons[index]);
-
-                  /// EQUAL BTN
-                  case 18:
-                  case 19:
-                    return CustomButton(
-                        buttonTapped: () {
-                          controller.equalPressed();
-                          if (index == 18) {
-                            String output = controller.userOutput;
-                            if (double.tryParse(output) != null) {
-                              widget.onClickDone?.call(double.parse(output));
-                            }
-                          }
-                        },
-                        color: isDarkTheme
-                            ? DarkColors.btnBgColor
-                            : LightColors.btnBgColor,
-                        textColor: isDarkTheme
-                            ? DarkColors.leftOperatorColor
-                            : LightColors.leftOperatorColor,
-                        text: buttons[index]);
-
-                  default:
-                    return CustomButton(
-                        buttonTapped: () {
-                          controller.onBtnTapped(buttons, index);
-                        },
-                        color: isDarkTheme
-                            ? DarkColors.btnBgColor
-                            : LightColors.btnBgColor,
-                        textColor: isOperator(buttons[index])
-                            ? LightColors.operatorColor
-                            : isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
-                        text: buttons[index]);
-                }
-              }),
-        ));
+              default:
+                return CustomButton(
+                    buttonTapped: () => controller.onBtnTapped(buttons, index),
+                    color: isDarkTheme
+                        ? DarkColors.btnBgColor
+                        : LightColors.btnBgColor,
+                    textColor: isOperator(buttons[index])
+                        ? LightColors.operatorColor
+                        : isDarkTheme
+                            ? Colors.white
+                            : Colors.black,
+                    text: buttons[index]);
+            }
+          },
+        ),
+      ),
+    );
   }
 
   /// Out put Section - Show Result

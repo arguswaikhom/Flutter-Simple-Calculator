@@ -1,0 +1,4 @@
+enum CalculatorTheme {
+  light,
+  dark,
+}

@@ -30,8 +30,8 @@ class CalculateController extends GetxController {
   }
 
   /// add to the input
-  appendToInput(double value) {
-    userInput += value.toString();
+  resetInput(double value) {
+    userInput = value.toString();
     update();
   }
 

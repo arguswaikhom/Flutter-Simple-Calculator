@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calculator/src/bindings/my_bindings.dart';
-import 'package:flutter_calculator/src/controller/theme_controller.dart';
+import 'package:flutter_calculator/src/model/calculator_theme.dart';
 import 'package:flutter_calculator/src/screen/main_screen.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
