@@ -12,6 +12,7 @@ class CalculateController extends GetxController {
   /// Equal Button Pressed Func
   equalPressed() {
     String userInputFC = userInput;
+    if (userInputFC.trim().isEmpty) return;
     userInputFC = userInputFC.replaceAll("x", "*");
     Parser p = Parser();
     Expression exp = p.parse(userInputFC);
