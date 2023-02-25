@@ -38,6 +38,8 @@ class CalculateController extends GetxController {
 
   /// Delet Button Pressed Func
   deleteBtnAction() {
+    String userInputFC = userInput;
+    if (userInputFC.trim().isEmpty) return;
     userInput = userInput.substring(0, userInput.length - 1);
     update();
   }
